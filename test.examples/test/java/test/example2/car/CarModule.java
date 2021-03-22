@@ -7,9 +7,8 @@ import test.example2.car.pool.CarPoolModule;
 @Installs(bundles = CarPoolModule.class)
 public class CarModule extends BinderModule {
 
-	@Override
-	protected void declare() {
-		autobind().in(CarService.class);
-	}
-
+  @Override
+  protected void declare() {
+    autobind().in(CarService.class);
+  }
 }

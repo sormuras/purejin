@@ -8,15 +8,12 @@ package se.jbee.inject.bind;
 /**
  * A bundle installs sub-bundles and {@link Module}s.
  *
- * All {@link Bundle}s are real singletons. A bundle means you get X all the
- * time. No less, no more. Everything (installed) or nothing (uninstalled).
+ * <p>All {@link Bundle}s are real singletons. A bundle means you get X all the time. No less, no
+ * more. Everything (installed) or nothing (uninstalled).
  */
 @FunctionalInterface
 public interface Bundle {
 
-	/**
-	 * @param bootstrap The {@link Bootstrapper} this {@link Bundle} should
-	 *            install itself to.
-	 */
-	void bootstrap(Bootstrapper bootstrap);
+  /** @param bootstrap The {@link Bootstrapper} this {@link Bundle} should install itself to. */
+  void bootstrap(Bootstrapper bootstrap);
 }

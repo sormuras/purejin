@@ -10,15 +10,15 @@ import se.jbee.inject.bind.Bundle;
 /**
  * Determines all reachable {@link Bundle}s starting from a root {@link Bundle}.
  *
- * This is more a utility API for testing.
+ * <p>This is more a utility API for testing.
  */
 @FunctionalInterface
 public interface BundleBootstrapper {
 
-	/**
-	 * @param root origin of reachable computation
-	 * @return All {@link Bundle}s (their {@link Class}es) that are reachable
-	 *         (installed) when starting from the given root {@link Bundle}.
-	 */
-	Class<? extends Bundle>[] installedBundles(Class<? extends Bundle> root);
+  /**
+   * @param root origin of reachable computation
+   * @return All {@link Bundle}s (their {@link Class}es) that are reachable (installed) when
+   *     starting from the given root {@link Bundle}.
+   */
+  Class<? extends Bundle>[] installedBundles(Class<? extends Bundle> root);
 }

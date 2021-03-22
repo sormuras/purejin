@@ -1,14 +1,14 @@
 package test.integration.util;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
-
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
 @Retention(RUNTIME)
-@Target({ METHOD, PARAMETER, FIELD })
+@Target({METHOD, PARAMETER, FIELD})
 public @interface Resource {
 
-	String value() default "";
+  String value() default "";
 }

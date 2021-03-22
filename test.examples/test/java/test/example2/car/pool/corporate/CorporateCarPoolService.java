@@ -4,7 +4,7 @@ import test.example2.Car;
 
 public class CorporateCarPoolService {
 
-	public Car[] corporatePool() {
-		return new Car[] { new Car("monopoly1") };
-	}
+  public Car[] corporatePool() {
+    return new Car[] {new Car("monopoly1")};
+  }
 }

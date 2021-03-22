@@ -1,5 +1,8 @@
 package test.integration.bind;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.io.Serializable;
 import org.junit.jupiter.api.Test;
 import se.jbee.inject.Injector;
 import se.jbee.inject.UnresolvableDependency;
@@ -9,140 +12,122 @@ import se.jbee.inject.binder.BinderModule;
 import se.jbee.inject.bootstrap.Bootstrap;
 import se.jbee.inject.config.PublishesBy;
 
-import java.io.Serializable;
-
-import static org.junit.jupiter.api.Assertions.*;
-
 /**
- * This tests demonstrates how the {@link Binder#withIndirectAccess()} method
- * can be used to restrict access to a implementation type to its interfaces.
+ * This tests demonstrates how the {@link Binder#withIndirectAccess()} method can be used to
+ * restrict access to a implementation type to its interfaces.
  */
 class TestFeatureIndirectAccessOnlyBinds {
 
-	interface Abstraction {
+  interface Abstraction {}
 
-	}
+  public static class Implementation implements Abstraction {}
 
-	public static class Implementation implements Abstraction {
+  interface Abstraction2 {}
 
-	}
+  public static class Implementation2 implements Abstraction2 {}
 
-	interface Abstraction2 {
+  public static class ValidReceiver {
 
-	}
+    final Abstraction abs;
 
-	public static class Implementation2 implements Abstraction2 {
+    public ValidReceiver(Abstraction abs) {
+      this.abs = abs;
+    }
+  }
 
-	}
+  public static class InvalidReceiver {
 
-	public static class ValidReceiver {
+    final Implementation impl;
 
-		final Abstraction abs;
+    public InvalidReceiver(Implementation impl) {
+      this.impl = impl;
+    }
+  }
 
-		public ValidReceiver(Abstraction abs) {
-			this.abs = abs;
-		}
-	}
+  public static class InvalidNestedReceiver {
 
-	public static class InvalidReceiver {
+    final InvalidReceiver invalid;
 
-		final Implementation impl;
+    public InvalidNestedReceiver(InvalidReceiver invalid) {
+      this.invalid = invalid;
+    }
+  }
 
-		public InvalidReceiver(Implementation impl) {
-			this.impl = impl;
-		}
-	}
+  public static class ValidNestedReceiver {
 
-	public static class InvalidNestedReceiver {
+    final ValidReceiver valid;
 
-		final InvalidReceiver invalid;
+    public ValidNestedReceiver(ValidReceiver valid) {
+      this.valid = valid;
+    }
+  }
 
-		public InvalidNestedReceiver(InvalidReceiver invalid) {
-			this.invalid = invalid;
-		}
+  static class TestFeatureIndirectAccessOnlyBindsModule extends BinderModule {
 
-	}
+    @Override
+    protected void declare() {
+      withIndirectAccess().bind(Serializable.class).to("42");
+      withIndirectAccess().bind(Abstraction.class).to(Implementation.class);
+      withIndirectAccess().withPublishedAccess().bind(Implementation2.class).toConstructor();
+      construct(ValidReceiver.class);
+      construct(InvalidReceiver.class);
+      construct(ValidNestedReceiver.class);
+      construct(InvalidNestedReceiver.class);
+    }
+  }
 
-	public static class ValidNestedReceiver {
+  private final Injector injector =
+      Bootstrap.injector(
+          Bootstrap.DEFAULT_ENV.with(PublishesBy.class, PublishesBy.SUPER),
+          TestFeatureIndirectAccessOnlyBindsModule.class);
 
-		final ValidReceiver valid;
+  @Test
+  void indirectConstantResourcesCanBeResolvedViaInterface() {
+    assertEquals("42", injector.resolve(Serializable.class));
+  }
 
-		public ValidNestedReceiver(ValidReceiver valid) {
-			this.valid = valid;
-		}
-	}
+  @Test
+  void indirectReferencedResourcesCanBeResolvedViaInterface() {
+    assertSame(Implementation.class, injector.resolve(Abstraction.class).getClass());
+  }
 
-	static class TestFeatureIndirectAccessOnlyBindsModule extends BinderModule {
+  @Test
+  void indirectAutobindResourcesCanBeResolvedViaInterface() {
+    assertSame(Implementation2.class, injector.resolve(Abstraction2.class).getClass());
+  }
 
-		@Override
-		protected void declare() {
-			withIndirectAccess().bind(Serializable.class).to("42");
-			withIndirectAccess().bind(Abstraction.class).to(
-					Implementation.class);
-			withIndirectAccess().withPublishedAccess().bind(
-					Implementation2.class).toConstructor();
-			construct(ValidReceiver.class);
-			construct(InvalidReceiver.class);
-			construct(ValidNestedReceiver.class);
-			construct(InvalidNestedReceiver.class);
-		}
+  @Test
+  void indirectResourcesCanBeInjectedViaInterface() {
+    assertSame(Implementation.class, injector.resolve(ValidReceiver.class).abs.getClass());
+  }
 
-	}
+  @Test
+  void indirectResourcesCanBeInjectedViaInterfaceInHierarchy() {
+    assertSame(
+        Implementation.class, injector.resolve(ValidNestedReceiver.class).valid.abs.getClass());
+  }
 
-	private final Injector injector = Bootstrap.injector(
-			Bootstrap.DEFAULT_ENV.with(PublishesBy.class, PublishesBy.SUPER),
-			TestFeatureIndirectAccessOnlyBindsModule.class);
+  @Test
+  void indirectReferencedResourcesCannotBeResolvedDirectly() {
+    assertThrows(IllegalAccess.class, () -> injector.resolve(Implementation.class));
+  }
 
-	@Test
-	void indirectConstantResourcesCanBeResolvedViaInterface() {
-		assertEquals("42", injector.resolve(Serializable.class));
-	}
+  @Test
+  void indirectAutobindResourcesCannotBeResolvedDirectly() {
+    assertThrows(
+        UnresolvableDependency.IllegalAccess.class, () -> injector.resolve(Implementation2.class));
+  }
 
-	@Test
-	void indirectReferencedResourcesCanBeResolvedViaInterface() {
-		assertSame(Implementation.class,
-				injector.resolve(Abstraction.class).getClass());
-	}
+  @Test
+  void indirectResourcesCannotBeInjectedDirectly() {
+    assertThrows(
+        UnresolvableDependency.IllegalAccess.class, () -> injector.resolve(InvalidReceiver.class));
+  }
 
-	@Test
-	void indirectAutobindResourcesCanBeResolvedViaInterface() {
-		assertSame(Implementation2.class,
-				injector.resolve(Abstraction2.class).getClass());
-	}
-
-	@Test
-	void indirectResourcesCanBeInjectedViaInterface() {
-		assertSame(Implementation.class,
-				injector.resolve(ValidReceiver.class).abs.getClass());
-	}
-
-	@Test
-	void indirectResourcesCanBeInjectedViaInterfaceInHierarchy() {
-		assertSame(Implementation.class, injector.resolve(
-				ValidNestedReceiver.class).valid.abs.getClass());
-	}
-
-	@Test
-	void indirectReferencedResourcesCannotBeResolvedDirectly() {
-		assertThrows(IllegalAccess.class,
-				() -> injector.resolve(Implementation.class));
-	}
-
-	@Test
-	void indirectAutobindResourcesCannotBeResolvedDirectly() {
-		assertThrows(UnresolvableDependency.IllegalAccess.class,
-				() -> injector.resolve(Implementation2.class));
-	}
-
-	@Test
-	void indirectResourcesCannotBeInjectedDirectly() {
-		assertThrows(UnresolvableDependency.IllegalAccess.class,
-				() -> injector.resolve(InvalidReceiver.class));
-	}
-
-	@Test
-	void indirectResourcesCannotBeInjectedDirectlyInHierarchy() {
-		assertThrows(UnresolvableDependency.IllegalAccess.class,
-				() -> injector.resolve(InvalidNestedReceiver.class));
-	}
+  @Test
+  void indirectResourcesCannotBeInjectedDirectlyInHierarchy() {
+    assertThrows(
+        UnresolvableDependency.IllegalAccess.class,
+        () -> injector.resolve(InvalidNestedReceiver.class));
+  }
 }

@@ -11,10 +11,10 @@ import test.example2.car.pool.CarPoolEnvModule;
 @Installs(bundles = CarPoolEnvModule.class)
 public class CarEnvModule extends LocalEnvModule {
 
-	@Override
-	protected void declare() {
-		bind(NamesBy.class).to(NamesBy.DECLARED_NAME);
-		bind(ProducesBy.class).to(ProducesBy.declaredMethods(false)
-			.returnTypeAssignableTo(Type.raw(Car.class)));
-	}
+  @Override
+  protected void declare() {
+    bind(NamesBy.class).to(NamesBy.DECLARED_NAME);
+    bind(ProducesBy.class)
+        .to(ProducesBy.declaredMethods(false).returnTypeAssignableTo(Type.raw(Car.class)));
+  }
 }

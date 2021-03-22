@@ -4,8 +4,8 @@ import se.jbee.inject.binder.BinderModule;
 
 public class CorporateCarPoolModule extends BinderModule {
 
-	@Override
-	protected void declare() {
-		autobind().in(CorporateCarPoolService.class);
-	}
+  @Override
+  protected void declare() {
+    autobind().in(CorporateCarPoolService.class);
+  }
 }

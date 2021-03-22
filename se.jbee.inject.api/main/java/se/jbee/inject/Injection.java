@@ -9,45 +9,42 @@ import java.io.Serializable;
 
 /**
  * Describes a "stack-frame" or "layer" within the injection process.
- * <p>
- * For example, when resolving instance A which causes resolving instance B the
- * resolution or injection of A becomes the first frame, the injection of B the
- * second and so forth.
+ *
+ * <p>For example, when resolving instance A which causes resolving instance B the resolution or
+ * injection of A becomes the first frame, the injection of B the second and so forth.
  */
 public final class Injection implements Serializable {
 
-	public final Instance<?> dependency;
-	public final Locator<?> target;
-	public final ScopeLifeCycle lifeCycle;
+  public final Instance<?> dependency;
+  public final Locator<?> target;
+  public final ScopeLifeCycle lifeCycle;
 
-	public Injection(Instance<?> dependency, Locator<?> target,
-			ScopeLifeCycle lifeCycle) {
-		this.dependency = dependency;
-		this.target = target;
-		this.lifeCycle = lifeCycle;
-	}
+  public Injection(Instance<?> dependency, Locator<?> target, ScopeLifeCycle lifeCycle) {
+    this.dependency = dependency;
+    this.target = target;
+    this.lifeCycle = lifeCycle;
+  }
 
-	@Override
-	public boolean equals(Object obj) {
-		return obj instanceof Injection && equalTo((Injection) obj);
-	}
+  @Override
+  public boolean equals(Object obj) {
+    return obj instanceof Injection && equalTo((Injection) obj);
+  }
 
-	@Override
-	public int hashCode() {
-		return dependency.hashCode() ^ target.hashCode();
-	}
+  @Override
+  public int hashCode() {
+    return dependency.hashCode() ^ target.hashCode();
+  }
 
-	public boolean equalTo(Injection other) {
-		return this == other || dependency.equalTo(other.dependency)
-			&& target.equalTo(other.target);
-	}
+  public boolean equalTo(Injection other) {
+    return this == other || dependency.equalTo(other.dependency) && target.equalTo(other.target);
+  }
 
-	@Override
-	public String toString() {
-		return dependency + " from " + target;
-	}
+  @Override
+  public String toString() {
+    return dependency + " from " + target;
+  }
 
-	public Injection ignoredScoping() {
-		return new Injection(dependency, target, ScopeLifeCycle.ignore);
-	}
+  public Injection ignoredScoping() {
+    return new Injection(dependency, target, ScopeLifeCycle.ignore);
+  }
 }

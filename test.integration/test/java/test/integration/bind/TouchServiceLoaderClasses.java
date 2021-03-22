@@ -7,12 +7,11 @@ import se.jbee.inject.binder.ServiceLoaderEnvBundles;
 
 class TouchServiceLoaderClasses {
 
-	@SuppressWarnings("unused")
-	@Test
-	void test() {
-		new ServiceLoaderAnnotations();
-		new ServiceLoaderBundles();
-		new ServiceLoaderEnvBundles();
-	}
-
+  @SuppressWarnings("unused")
+  @Test
+  void test() {
+    new ServiceLoaderAnnotations();
+    new ServiceLoaderBundles();
+    new ServiceLoaderEnvBundles();
+  }
 }

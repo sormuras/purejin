@@ -4,5 +4,5 @@ import se.jbee.inject.config.ProducesBy;
 
 public interface ConnectInBinder<B> {
 
-	B connect(ProducesBy connectsBy);
+  B connect(ProducesBy connectsBy);
 }

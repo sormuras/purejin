@@ -1,4 +1,3 @@
 package se.jbee.inject.event;
 
-public final class EventTarget {
-}
+public final class EventTarget {}

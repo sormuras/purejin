@@ -11,14 +11,14 @@ import se.jbee.inject.bind.Module;
 /**
  * Determines / extracts the {@link Module}s from a root {@link Bundle}.
  *
- * This is more a utility API for testing.
+ * <p>This is more a utility API for testing.
  */
 @FunctionalInterface
 public interface ModuleBootstrapper {
 
-	/**
-	 * @return All {@link Module}s that result from expanding the given root
-	 *         {@link Bundle} to the module level.
-	 */
-	Module[] installedModules(Class<? extends Bundle> root);
+  /**
+   * @return All {@link Module}s that result from expanding the given root {@link Bundle} to the
+   *     module level.
+   */
+  Module[] installedModules(Class<? extends Bundle> root);
 }

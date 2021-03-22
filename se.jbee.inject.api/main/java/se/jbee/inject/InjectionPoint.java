@@ -4,13 +4,13 @@ import java.lang.reflect.AnnotatedElement;
 
 public interface InjectionPoint extends Annotated {
 
-	InjectionPoint NONE = () -> Annotated.NOT_ANNOTATED;
+  InjectionPoint NONE = () -> Annotated.NOT_ANNOTATED;
 
-	static InjectionPoint at(AnnotatedElement param) {
-		return () -> param;
-	}
+  static InjectionPoint at(AnnotatedElement param) {
+    return () -> param;
+  }
 
-	default boolean isNone() {
-		return this == NONE;
-	}
+  default boolean isNone() {
+    return this == NONE;
+  }
 }

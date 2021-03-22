@@ -1,12 +1,11 @@
 /**
- * Contains an add-on for convenient type conversion based on the {@link
- * se.jbee.inject.Converter} abstraction.
+ * Contains an add-on for convenient type conversion based on the {@link se.jbee.inject.Converter}
+ * abstraction.
  */
 module se.jbee.inject.convert {
+  requires se.jbee.lang;
+  requires se.jbee.inject.api;
+  requires se.jbee.inject.bind;
 
-	requires se.jbee.lang;
-	requires se.jbee.inject.api;
-	requires se.jbee.inject.bind;
-
-	exports se.jbee.inject.convert;
+  exports se.jbee.inject.convert;
 }

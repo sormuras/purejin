@@ -3,10 +3,9 @@
  * se.jbee.inject.action.Action}s to decouple caller and called code.
  */
 module se.jbee.inject.action {
+  requires se.jbee.lang;
+  requires se.jbee.inject.api;
+  requires se.jbee.inject.bind;
 
-	requires se.jbee.lang;
-	requires se.jbee.inject.api;
-	requires se.jbee.inject.bind;
-
-	exports se.jbee.inject.action;
+  exports se.jbee.inject.action;
 }

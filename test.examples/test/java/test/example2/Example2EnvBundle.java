@@ -9,9 +9,9 @@ import test.example2.car.CarEnvModule;
 @Extends(Env.class)
 public class Example2EnvBundle extends BootstrapperBundle {
 
-	@Override
-	protected void bootstrap() {
-		install(CarEnvModule.class);
-		install(BusEnvModule.class);
-	}
+  @Override
+  protected void bootstrap() {
+    install(CarEnvModule.class);
+    install(BusEnvModule.class);
+  }
 }
